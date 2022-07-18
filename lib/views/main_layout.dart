@@ -1,5 +1,4 @@
 import 'package:albaqer/app/helper_files/functions.dart';
-import 'package:albaqer/controllers/user_controller.dart';
 import 'package:albaqer/views/components/layout/app_drawer.dart';
 import 'package:albaqer/views/components/layout/custom_bottom_app_bar.dart';
 import 'package:albaqer/views/components/layout/fap.dart';
@@ -13,7 +12,6 @@ import 'package:albaqer/views/pages/quran/quran_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import 'package:provider/provider.dart';
 
 import 'pages/prayer_times/prayer_times_page.dart';
 
@@ -51,10 +49,6 @@ class _MainLayoutState extends State<MainLayout> {
         _selectedIndex = args as int;
       }
     }
-
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      context.read<UserController>().getLogedinUser();
-    });
 
     super.didChangeDependencies();
   }

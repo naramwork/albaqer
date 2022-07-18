@@ -7,7 +7,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-import '../../../app/themes/color_const.dart';
 import 'change_date_widget.dart';
 
 class MainHomeCard extends StatelessWidget {
@@ -88,13 +87,13 @@ class MainHomeCard extends StatelessWidget {
                                       child: InkWell(
                                         onTap: () {
                                           showDialog(
-                                              context: context,
-                                              builder: (context) =>
-                                                  ChangeDateWidget(
-                                                      arabicDate: context
-                                                          .watch<
-                                                              PrayerTimeController>()
-                                                          .arabicDate));
+                                            context: context,
+                                            builder: (context) => ChangeDateWidget(
+                                                arabicDate: context
+                                                    .watch<
+                                                        PrayerTimeController>()
+                                                    .arabicDate),
+                                          );
                                         },
                                         child: const Icon(
                                           Icons.edit,
@@ -255,7 +254,7 @@ class DateContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String date =
-        '${arabicDate.dayName} ${arabicDate.day} ${arabicDate.monthName} - ${arabicDate.year} ه ';
+        '${arabicDate.day} ${arabicDate.monthName} - ${arabicDate.year} ه ';
     return Flexible(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

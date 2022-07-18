@@ -6,14 +6,13 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:intl/intl.dart' as intl;
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 import '../../../app/themes/color_const.dart';
 import '../../../controllers/color_mode.dart';
-import '../../components/marriage/marriage_app_bar.dart';
+import '../../components/marriage_app_bar.dart';
 
 class ReminderPage extends StatefulWidget {
   static String routeName = '/reminder_page';
@@ -29,10 +28,27 @@ class _ReminderPageState extends State<ReminderPage> {
   Box<Reminder>? remindersBox;
   @override
   initState() {
+    initReminder();
+    super.initState();
+  }
+
+  initReminder() async {
     remindersBox = Hive.box<Reminder>(kReminderBoxName);
     reminders = remindersBox!.values.toList();
+    for (var reminder in reminders) {
+      await AwesomeNotifications().createNotification(
+        content: NotificationContent(
+            id: reminder.id,
+            channelKey: reminderChannelKey,
+            title: 'تذكير',
+            body: reminder.title,
+            backgroundColor: const Color(0xFF184B6C),
+            color: Colors.white,
+            category: NotificationCategory.Message),
+        schedule: NotificationCalendar.fromDate(date: reminder.date.toLocal()),
+      );
+    }
     setState(() {});
-    super.initState();
   }
 
   @override
@@ -77,6 +93,11 @@ class _ReminderPageState extends State<ReminderPage> {
                   textStyle: const TextStyle(
                       fontFamily: 'Tajawal',
                       color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400),
+                  specialDatesTextStyle: const TextStyle(
+                      fontFamily: 'Tajawal',
+                      color: Colors.white,
                       fontSize: 16,
                       fontWeight: FontWeight.w400),
                 ),

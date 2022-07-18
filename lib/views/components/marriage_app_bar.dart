@@ -1,6 +1,7 @@
-import 'package:albaqer/controllers/color_mode.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../controllers/color_mode.dart';
 
 class MarriageAppBar extends StatelessWidget implements PreferredSizeWidget {
   final AppBar appBar;

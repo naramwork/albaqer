@@ -3,14 +3,12 @@ import 'dart:io';
 import 'package:albaqer/app/helper_files/functions.dart';
 
 import 'package:albaqer/controllers/color_mode.dart';
-import 'package:albaqer/controllers/marriage_controller.dart';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:albaqer/controllers/prayer_time_controller.dart';
 import 'package:albaqer/controllers/update_content_controler.dart';
 
-import 'package:albaqer/views/pages/no_internet_page.dart';
 import 'package:geolocator/geolocator.dart';
 
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -35,13 +33,12 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-
-    context.read<MarriageController>().getMessages();
     AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
       if (!isAllowed) {
         AwesomeNotifications().requestPermissionToSendNotifications();
       }
     });
+
     redirectBaseOnInternetConnection();
   }
 
@@ -49,13 +46,15 @@ class _SplashScreenState extends State<SplashScreen> {
     // cancel daily content notifications
     await AwesomeNotifications()
         .cancelNotificationsByChannelKey(kVersesChannleKey);
+
     await AwesomeNotifications()
         .cancelNotificationsByChannelKey(kDuasChannleKey);
     await AwesomeNotifications()
         .cancelNotificationsByChannelKey(kHadithChannleKey);
+    await AwesomeNotifications().cancelAll();
 
-    var connectivityResult = await (Connectivity().checkConnectivity());
-    bool isOnline = await checkConnection();
+    // var connectivityResult = await (Connectivity().checkConnectivity());
+    // bool isOnline = await checkConnection();
     bool serviceEnabled;
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
 
@@ -69,11 +68,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     context.read<PrayerTimeController>().initPrayerTime().then((value) {
       checkAndAddNotifications(context).then((value) {
-        if (connectivityResult == ConnectivityResult.none || !isOnline) {
-          Navigator.pushReplacementNamed(context, NoInternetPage.routeName);
-        } else {
-          Navigator.pushReplacementNamed(context, MainLayout.routeName);
-        }
+        Navigator.pushReplacementNamed(context, MainLayout.routeName);
       });
     });
   }

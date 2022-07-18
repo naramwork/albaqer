@@ -45,4 +45,5 @@ NotificationChannel setNewPrayerChannel(
         defaultColor: Colors.blue,
         importance: NotificationImportance.High,
         playSound: true,
+        soundSource: 'resource://raw/res_allah_notification',
         channelGroupKey: 'prayer_times_group');

@@ -1,3 +1,4 @@
+import 'package:albaqer/views/pages/reminder/edit-reminder_dialog.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -76,23 +77,59 @@ class ReminderList extends StatelessWidget {
                         SizedBox(
                           width: 1.w,
                         ),
-                        Material(
-                          color: context.watch<ColorMode>().isDarkMode
-                              ? Theme.of(context).primaryColor
-                              : Colors.white,
-                          child: Container(
-                            color: Colors.transparent,
-                            child: IconButton(
-                              onPressed: () async {
-                                remindersBox.deleteAt(box.length - i - 1);
-
-                                await AwesomeNotifications()
-                                    .cancelSchedule(reminder.id);
-                              },
-                              icon: Icon(Icons.delete,
-                                  color: Colors.red.shade900),
+                        Row(
+                          children: [
+                            Material(
+                              color: context.watch<ColorMode>().isDarkMode
+                                  ? Theme.of(context).primaryColor
+                                  : Colors.white,
+                              child: Container(
+                                color: Colors.transparent,
+                                child: IconButton(
+                                  onPressed: () async {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return EditReminderDialog(
+                                            remindersBox: remindersBox,
+                                            reminder: reminder,
+                                            index: box.length - i - 1,
+                                          );
+                                        });
+                                  },
+                                  icon: Icon(Icons.edit,
+                                      color: Colors.blue.shade400),
+                                ),
+                              ),
                             ),
-                          ),
+                            Material(
+                              color: context.watch<ColorMode>().isDarkMode
+                                  ? Theme.of(context).primaryColor
+                                  : Colors.white,
+                              child: Container(
+                                color: Colors.transparent,
+                                child: IconButton(
+                                  onPressed: () async {
+                                    remindersBox.deleteAt(box.length - i - 1);
+
+                                    await AwesomeNotifications()
+                                        .cancelSchedule(reminder.id);
+                                    // showDialog(
+                                    //     context: context,
+                                    //     builder: (context) {
+                                    //       return EditReminderDialog(
+                                    //         remindersBox: remindersBox,
+                                    //         reminder: reminder,
+                                    //         index: box.length - i - 1,
+                                    //       );
+                                    //     });
+                                  },
+                                  icon: Icon(Icons.delete,
+                                      color: Colors.red.shade900),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),

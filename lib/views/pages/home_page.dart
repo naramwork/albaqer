@@ -140,7 +140,7 @@ class HomePage extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   child: RoundedButtonWidget(
                     label: const Text(
-                      'ايجاد شريك',
+                      'اجندة مواعيد واعمال',
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 14,

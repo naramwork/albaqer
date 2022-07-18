@@ -7,12 +7,16 @@ import 'package:albaqer/views/components/content_card_components/card_widget.dar
 import 'package:albaqer/views/components/content_card_components/icon_triangle_top_widget.dart';
 
 import 'package:albaqer/views/components/static_page_name_container.dart';
+import 'package:albaqer/views/pages/content_pages/previous_hadith_page.dart';
 
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
 
 import 'package:responsive_sizer/responsive_sizer.dart';
+
+import '../../components/empty.dart';
+import '../../components/rounded_button_widget.dart';
 
 class HadithOnlinePage extends StatefulWidget {
   static const routeName = '/hadith_page';
@@ -81,22 +85,39 @@ class _HadithOnlinePageState extends State<HadithOnlinePage> {
                         height: 16,
                       ),
                       builderDelegate: PagedChildBuilderDelegate<Hadith>(
-                        itemBuilder: (context, hadith, index) => Padding(
-                          padding: EdgeInsets.only(bottom: 4.h, top: 3.h),
-                          child: CardWidget(
-                            hieght: (7.h -
-                                3.8.h), // container hight - top positione
-                            topWidget: const IconTriangleTopWidget(
-                              icon: ImageIcon(
-                                  AssetImage('assets/images/rosary.png'),
-                                  color: Colors.white),
-                            ),
-                            botWidget: BottomWidget(
-                              content: parseHtmlString(hadith.content.trim()),
-                            ),
-                          ),
-                        ),
-                      ),
+                          firstPageErrorIndicatorBuilder: ((context) =>
+                              const EmptyWidget(
+                                title: 'تأكد من اتصالك بالإنترنت',
+                              )),
+                          newPageErrorIndicatorBuilder: ((context) =>
+                              const EmptyWidget(
+                                title: 'تأكد من اتصالك بالإنترنت',
+                              )),
+                          itemBuilder: (context, verse, index) {
+                            if (index == 0) {
+                              return Column(
+                                children: [
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: RoundedButtonWidget(
+                                      label: const Text(
+                                        ' السابقة',
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      width: 30.w,
+                                      onpressed: () => Navigator.pushNamed(
+                                          context,
+                                          PreviousHadithPage.routeName),
+                                    ),
+                                  ),
+                                  buildCardWidget(verse, context),
+                                ],
+                              );
+                            }
+                            return buildCardWidget(verse, context);
+                          }),
                     ),
                   )
                 ]
@@ -134,4 +155,19 @@ class _HadithOnlinePageState extends State<HadithOnlinePage> {
         ),
         textAlign: TextAlign.center,
       );
+  Padding buildCardWidget(Hadith hadith, BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 4.h, top: 3.h),
+      child: CardWidget(
+        hieght: (7.h - 3.8.h), // container hight - top positione
+        topWidget: const IconTriangleTopWidget(
+          icon: ImageIcon(AssetImage('assets/images/rosary.png'),
+              color: Colors.white),
+        ),
+        botWidget: BottomWidget(
+          content: parseHtmlString(hadith.content.trim()),
+        ),
+      ),
+    );
+  }
 }

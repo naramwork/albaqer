@@ -20,7 +20,7 @@ class ChangeDateWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String date =
-        '${arabicDate.dayName} ${arabicDate.day} ${arabicDate.monthName} - ${arabicDate.year} ه ';
+        '${arabicDate.day} ${arabicDate.monthName} - ${arabicDate.year} ه ';
     return Dialog(
       insetPadding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 5.h),
       elevation: 12,

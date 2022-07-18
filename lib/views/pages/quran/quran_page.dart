@@ -27,7 +27,7 @@ class _QuranPageState extends State<QuranPage> {
   List<String> surahsNames = [];
   String? _selectedItem;
   NewVerse? foundedVerse;
-  String foundedVerseString = 'naram';
+  String foundedVerseString = '';
   List<Surah> searchSurah = [];
 
   @override

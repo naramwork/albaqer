@@ -39,7 +39,7 @@ class VersesController extends ChangeNotifier {
         _pagingController.appendPage(newVerseList, nextPageKey);
       }
     } catch (error) {
-      print('fetchPosts: $error');
+      _pagingController.error = error;
     }
   }
 
@@ -56,6 +56,32 @@ class VersesController extends ChangeNotifier {
       for (var verseData in verseListData) {
         final verse = Verse.fromJson(verseData);
         newVerseList.add(verse);
+      }
+      if (lastPage == pageNumber) {
+        // 3
+        _pagingController.appendLastPage(newVerseList);
+      } else {
+        final nextPageKey = pageNumber + 1;
+        _pagingController.appendPage(newVerseList, nextPageKey);
+      }
+    } catch (error) {
+      print('fetchPosts: $error');
+    }
+  }
+
+  Future<void> fetchPreviousHadith(
+      int pageNumber, PagingController<int, Hadith> _pagingController) async {
+    List<Hadith> newVerseList = [];
+    var url = Uri.parse('$kGetPreviousHadithUrl$pageNumber');
+    try {
+      final response = await http.get(url);
+      final jsonExtractedList = json.decode(response.body);
+      //final previousJsonList = jsonExtractedList['previous'];
+      final hadithListData = jsonExtractedList['data'] as List<dynamic>;
+      final lastPage = jsonExtractedList['last_page'];
+      for (var verseData in hadithListData) {
+        final hadith = Hadith.fromJson(verseData);
+        newVerseList.add(hadith);
       }
       if (lastPage == pageNumber) {
         // 3

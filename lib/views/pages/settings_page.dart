@@ -1,8 +1,4 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
-import 'package:albaqer/controllers/user_controller.dart';
-import 'package:albaqer/models/user.dart';
-import 'package:albaqer/views/pages/register/login_page.dart';
-import 'package:albaqer/views/pages/send_message_admin_modal.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:albaqer/app/helper_files/app_const.dart';
 import 'package:albaqer/app/helper_files/functions.dart';
@@ -134,70 +130,48 @@ class _SettingsPageState extends State<SettingsPage> {
             SizedBox(
               height: 2.h,
             ),
-            SettingCardContainer(
-                child: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: () {
-                  gotToEditUserPage(context);
-                },
-                child: Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.symmetric(vertical: 2.h),
-                  child: AutoSizeText(
-                    'تعديل الملف الشخصي',
-                    style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16,
-                        color: context.watch<ColorMode>().isDarkMode
-                            ? Colors.white
-                            : Colors.black),
-                    maxLines: 1,
-                  ),
-                ),
-              ),
-            )),
+
             SizedBox(
               height: 2.h,
             ),
-            SettingCardContainer(
-                child: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: () {
-                  User? user = context.read<UserController>().user;
-                  if (user == null) {
-                    Navigator.of(context).pushNamed(LoginPage.routeName);
-                  } else {
-                    showModalBottomSheet(
-                        shape: const RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.vertical(top: Radius.circular(30)),
-                        ),
-                        context: context,
-                        builder: (context) {
-                          return SendMessageAdminModal(
-                            currentUser: user,
-                          );
-                        });
-                  }
-                },
-                child: Container(
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.symmetric(vertical: 2.h),
-                  child: AutoSizeText(
-                    'ابلاغ إساءة',
-                    style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16,
-                        color: context.watch<ColorMode>().isDarkMode
-                            ? Colors.white
-                            : Colors.black),
-                    maxLines: 1,
-                  ),
-                ),
-              ),
-            ))
+            // SettingCardContainer(
+            //     child: Material(
+            //   color: Colors.transparent,
+            //   child: InkWell(
+            //     onTap: () {
+            //       User? user = context.read<UserController>().user;
+            //       if (user == null) {
+            //         Navigator.of(context).pushNamed(LoginPage.routeName);
+            //       } else {
+            //         showModalBottomSheet(
+            //             shape: const RoundedRectangleBorder(
+            //               borderRadius:
+            //                   BorderRadius.vertical(top: Radius.circular(30)),
+            //             ),
+            //             context: context,
+            //             builder: (context) {
+            //               return SendMessageAdminModal(
+            //                 currentUser: user,
+            //               );
+            //             });
+            //       }
+            //     },
+            //     child: Container(
+            //       alignment: Alignment.center,
+            //       padding: EdgeInsets.symmetric(vertical: 2.h),
+            //       child: AutoSizeText(
+            //         'ابلاغ إساءة',
+            //         style: TextStyle(
+            //             fontWeight: FontWeight.w500,
+            //             fontSize: 16,
+            //             color: context.watch<ColorMode>().isDarkMode
+            //                 ? Colors.white
+            //                 : Colors.black),
+            //         maxLines: 1,
+            //       ),
+            //     ),
+            //   ),
+            // ))
           ],
         ),
       ),

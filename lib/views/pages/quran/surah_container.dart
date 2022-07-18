@@ -9,25 +9,60 @@ import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'copy_dialog.dart';
 
-class SurahContainer extends StatelessWidget {
+class SurahContainer extends StatefulWidget {
   final Surah surah;
   final double fontSize;
   final String searchVerse;
-  final Map<String, HighlightedWord> words = {};
 
-  SurahContainer({
+  const SurahContainer({
     Key? key,
     required this.surah,
     required this.searchVerse,
     required this.fontSize,
   }) : super(key: key);
 
+  @override
+  State<SurahContainer> createState() => _SurahContainerState();
+}
+
+class _SurahContainerState extends State<SurahContainer> {
+  late Map<String, HighlightedWord> words = {};
+  var _keys = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_keys.isNotEmpty) {
+        if (_keys[0].currentContext != null) {
+          Scrollable.ensureVisible(
+            _keys[0].currentContext!,
+            alignment: 0.2,
+            duration: const Duration(milliseconds: 300),
+          );
+        }
+      }
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    words = getWords(context);
+    _keys = List<GlobalKey>.generate(
+      words.length,
+      (_) => GlobalKey(),
+    );
+
+    super.didChangeDependencies();
+  }
+
   TextStyle textStyle(BuildContext context) {
     return TextStyle(
         color:
             context.watch<ColorMode>().isDarkMode ? Colors.white : Colors.black,
         fontWeight: FontWeight.w500,
-        fontSize: fontSize,
+        fontSize: widget.fontSize,
         height: 2,
         fontFamily: 'Amiri');
   }
@@ -37,7 +72,7 @@ class SurahContainer extends StatelessWidget {
         color:
             context.watch<ColorMode>().isDarkMode ? Colors.white : Colors.black,
         fontWeight: FontWeight.w500,
-        fontSize: fontSize,
+        fontSize: widget.fontSize,
         height: 2,
         fontFamily: 'UthmanicHafs');
   }
@@ -48,7 +83,7 @@ class SurahContainer extends StatelessWidget {
         color:
             context.watch<ColorMode>().isDarkMode ? Colors.white : Colors.black,
         fontWeight: FontWeight.w500,
-        fontSize: fontSize - 2,
+        fontSize: widget.fontSize - 2,
         fontFamily: 'UthmanicHafs',
         background: Paint()
           ..color = Colors.yellowAccent.shade200
@@ -59,24 +94,27 @@ class SurahContainer extends StatelessWidget {
         color:
             context.watch<ColorMode>().isDarkMode ? Colors.white : Colors.black,
         fontWeight: FontWeight.w500,
-        fontSize: fontSize - 2,
+        fontSize: widget.fontSize - 2,
         fontFamily: 'UthmanicHafs',
         decoration: TextDecoration.overline);
   }
 
   Map<String, HighlightedWord> getWords(BuildContext context) {
-    String newSearchVerse = searchVerse
+    if (widget.searchVerse.isEmpty) {
+      return {};
+    }
+    String newSearchVerse = widget.searchVerse
         .replaceAll('\u0644\u0652\u0622', '\u0644\u06E1\u0623\u0653')
         .replaceAll('\u0644\u0650\u0622', '\u0644\u0650\u0623\u0653')
         .replaceAll('\u0644\u064E\u0622', '\u0644\u064E\u0623\u0653');
     words[newSearchVerse] = HighlightedWord(
       onTap: () {
-        showMapsBottomSheet(context, surah);
+        showMapsBottomSheet(context, widget.surah);
       },
       textStyle: TextStyle(
         color:
             context.watch<ColorMode>().isDarkMode ? Colors.white : Colors.black,
-        fontSize: fontSize,
+        fontSize: widget.fontSize,
         height: 2,
         fontFamily: 'UthmanicHafs',
         background: Paint()
@@ -84,17 +122,18 @@ class SurahContainer extends StatelessWidget {
           ..style = PaintingStyle.fill,
       ),
     );
-    if (surah.number == 96 && surah.juzNumber == 30) {
+    if (widget.surah.number == 96 && widget.surah.juzNumber == 30) {
       fixHighlight(context, 'وَٱسْجُدْ', newSearchVerse);
-    } else if (surah.number == 22 && surah.juzNumber == 17) {
+    } else if (widget.surah.number == 22 && widget.surah.juzNumber == 17) {
       fixHighlight(context, 'وَٱسْجُدُواْ', newSearchVerse);
-    } else if (surah.number == 25 && surah.juzNumber == 19) {
+    } else if (widget.surah.number == 25 && widget.surah.juzNumber == 19) {
       fixHighlight(context, 'ٱسْجُدُواْ', newSearchVerse);
-    } else if (surah.number == 41 && surah.juzNumber == 24) {
+    } else if (widget.surah.number == 41 && widget.surah.juzNumber == 24) {
       fixHighlight(context, 'وَٱسْجُدُواْ لِلَّهِ', newSearchVerse);
-    } else if (surah.number == 53 && surah.juzNumber == 27) {
+    } else if (widget.surah.number == 53 && widget.surah.juzNumber == 27) {
       fixHighlight(context, 'فَٱسۡجُدُواْ لِلَّهِ', newSearchVerse);
     }
+
     return words;
   }
 
@@ -102,14 +141,14 @@ class SurahContainer extends StatelessWidget {
     if (newSearchVerse.contains(text)) {
       words[newSearchVerse] = HighlightedWord(
         onTap: () {
-          showMapsBottomSheet(context, surah);
+          showMapsBottomSheet(context, widget.surah);
         },
         textStyle: underlinedTextStyle(context, true),
       );
     } else {
       words[text] = HighlightedWord(
         onTap: () {
-          showMapsBottomSheet(context, surah);
+          showMapsBottomSheet(context, widget.surah);
         },
         textStyle: underlinedTextStyle(context, false),
       );
@@ -126,11 +165,11 @@ class SurahContainer extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '﴿ سورة ${surah.name} ﴾',
+                  '﴿ سورة ${widget.surah.name} ﴾',
                   style: textStyle(context),
                 ),
                 Text(
-                  '﴿ الجزء ${surah.juzNumber}﴾',
+                  '﴿ الجزء ${widget.surah.juzNumber}﴾',
                   style: textStyle(context),
                 ),
               ],
@@ -138,7 +177,7 @@ class SurahContainer extends StatelessWidget {
             Container(
               padding: EdgeInsets.fromLTRB(25.w, 1.h, 25.w, 0.4.h),
               child: Text(
-                'سورة ${surah.name}',
+                'سورة ${widget.surah.name}',
                 style: textStyle(context),
                 textAlign: TextAlign.center,
               ),
@@ -195,21 +234,23 @@ class SurahContainer extends StatelessWidget {
                           padding: const EdgeInsets.only(top: 5),
                           child: InkWell(
                             onTap: () {
-                              showMapsBottomSheet(context, surah);
+                              showMapsBottomSheet(context, widget.surah);
                             },
                             child: TextHighlight(
-                              text: surah.content,
-                              words: getWords(context),
+                              text: widget.surah.content,
+                              words: words,
                               textScaleFactor: 1.4,
+                              binding: HighlightBinding.first,
                               textAlign: TextAlign.right,
                               textStyle: TextStyle(
                                   fontWeight: FontWeight.w500,
                                   color: context.watch<ColorMode>().isDarkMode
                                       ? Colors.white
                                       : Colors.black,
-                                  fontSize: fontSize + 2,
+                                  fontSize: widget.fontSize + 2,
                                   height: 2,
                                   fontFamily: 'UthmanicHafs'),
+                              keys: _keys,
                             ),
                           ),
                         ),

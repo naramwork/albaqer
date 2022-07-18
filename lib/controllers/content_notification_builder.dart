@@ -79,31 +79,3 @@ void generateWeekContentNotification(
     date++;
   }
 }
-
-Future<bool> checkIfOlreadyExists(String notificationChannel) async {
-  List<NotificationModel> scheduleNotification =
-      await AwesomeNotifications().listScheduledNotifications();
-  if (scheduleNotification.isNotEmpty) {
-    var list = scheduleNotification.where((element) {
-      if (element.content?.channelKey == notificationChannel) {
-        return true;
-      } else {
-        return false;
-      }
-    });
-    List newList = list.toList();
-    newList.sort((a, b) =>
-        a.schedule!.toMap()['day'].compareTo(b.schedule!.toMap()['day']));
-
-    if (newList.isNotEmpty) {
-      NotificationModel versesNotifications = newList.first;
-      if (versesNotifications.schedule!.toMap()['day'] == DateTime.now().day) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-  }
-
-  return false;
-}

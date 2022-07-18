@@ -7,13 +7,14 @@ import 'package:albaqer/controllers/color_mode.dart';
 import 'package:albaqer/models/fcm_notfication.dart';
 import 'package:albaqer/views/components/layout/custom_bottom_app_bar.dart';
 import 'package:albaqer/views/components/layout/fap.dart';
-import 'package:albaqer/views/components/marriage/marriage_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:http/http.dart' as http;
 import 'package:share_plus/share_plus.dart';
+
+import '../components/marriage_app_bar.dart';
 
 class NotificationPage extends StatelessWidget {
   static String routeName = '/notification_page';

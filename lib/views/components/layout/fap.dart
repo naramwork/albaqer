@@ -20,9 +20,7 @@ class FAP extends StatelessWidget {
         padding: const EdgeInsets.all(10),
         width: 60,
         height: 60,
-        child: const ImageIcon(
-          AssetImage('assets/images/ring.png'),
-        ),
+        child: const Icon(Icons.my_library_add_outlined),
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           gradient: LinearGradient(

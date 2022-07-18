@@ -4,11 +4,11 @@ import 'package:albaqer/app/helper_files/app_const.dart';
 import 'package:albaqer/app/themes/color_const.dart';
 import 'package:albaqer/controllers/color_mode.dart';
 import 'package:albaqer/models/holiday.dart';
-import 'package:albaqer/views/components/marriage/marriage_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
+import '../../components/marriage_app_bar.dart';
 import 'holiday_list_container.dart';
 
 class HolidayPage extends StatelessWidget {

@@ -13,17 +13,23 @@ import '../../../controllers/color_mode.dart';
 import '../../../models/reminder.dart';
 import '../../components/rounded_button_widget.dart';
 
-class ReminderDialog extends StatelessWidget {
-  final myController = TextEditingController();
-  final DateTime date;
-
+class EditReminderDialog extends StatelessWidget {
+  final Reminder reminder;
+  final int index;
   final Box remindersBox;
-  ReminderDialog({Key? key, required this.date, required this.remindersBox})
+  const EditReminderDialog(
+      {Key? key,
+      required this.remindersBox,
+      required this.reminder,
+      required this.index})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    DateTime date1 = date;
+    print(index);
+    TextEditingController myController =
+        TextEditingController(text: reminder.title);
+    DateTime date1 = reminder.date;
     return Dialog(
       insetPadding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
       elevation: 12,
@@ -85,10 +91,11 @@ class ReminderDialog extends StatelessWidget {
                       ),
                       textAlignVertical: TextAlignVertical.center,
                       textInputAction: TextInputAction.done,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         hintText: 'العنوان',
                         hintMaxLines: 2,
-                        hintStyle: TextStyle(color: Colors.grey, fontSize: 14),
+                        hintStyle:
+                            const TextStyle(color: Colors.grey, fontSize: 14),
                         border: InputBorder.none,
                       ),
                     ),
@@ -196,7 +203,7 @@ class ReminderDialog extends StatelessWidget {
                   //       .toList()
                   //       .indexWhere((element) => element.id == id);
                   // }
-                  createReminder(date1, context, id);
+                  createReminder(date1, context, id, myController.text);
                 })
           ],
         ),
@@ -204,8 +211,9 @@ class ReminderDialog extends StatelessWidget {
     );
   }
 
-  void createReminder(DateTime date1, BuildContext context, int id) async {
-    String value = myController.text;
+  void createReminder(
+      DateTime date1, BuildContext context, int id, String text) async {
+    String value = text;
     bool isSuccess = await AwesomeNotifications().createNotification(
       content: NotificationContent(
           id: id,
@@ -217,11 +225,11 @@ class ReminderDialog extends StatelessWidget {
           category: NotificationCategory.Message),
       schedule: NotificationCalendar.fromDate(date: date1.toLocal()),
     );
-    remindersBox.add(Reminder(title: value, date: date1, id: id));
+    remindersBox.putAt(index, Reminder(title: value, date: date1, id: id));
     Navigator.pop(context);
 
     if (isSuccess) {
-      showSnackBar('تمت إضافة التذكير بنجاح', context);
+      showSnackBar('تمت تعديل التذكير بنجاح', context);
     } else {
       showSnackBar('حدث خطأ ما الرجاء المحاولة لاحقا', context);
     }

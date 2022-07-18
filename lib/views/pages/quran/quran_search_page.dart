@@ -5,13 +5,14 @@ import 'package:albaqer/models/new_verse.dart';
 import 'package:albaqer/models/qurran_result.dart';
 import 'package:albaqer/views/components/content_card_components/card_widget.dart';
 import 'package:albaqer/views/components/content_card_components/verse_top_widget.dart';
-import 'package:albaqer/views/components/marriage/marriage_app_bar.dart';
 import 'package:albaqer/views/pages/quran/quran_result_page.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
 import 'package:responsive_sizer/responsive_sizer.dart';
+
+import '../../components/marriage_app_bar.dart';
 
 class QuranSearchPage extends StatefulWidget {
   static String routeName = '/quran_search_page';

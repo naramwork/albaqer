@@ -150,7 +150,7 @@ class PrayerTimeController with ChangeNotifier {
         dayName: dayName,
         day: day,
         year: year,
-        gregorianDate: DateFormat.yMMMd('ar_DZ').format(DateTime.now()));
+        gregorianDate: DateFormat.yMMMEd('ar_DZ').format(DateTime.now()));
     notifyListeners();
   }
 

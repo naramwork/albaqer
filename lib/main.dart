@@ -4,13 +4,10 @@ import 'package:albaqer/models/reminder.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:albaqer/app/helper_files/app_const.dart';
 import 'package:albaqer/controllers/app_info_controller.dart';
-import 'package:albaqer/controllers/edit_user_controller.dart';
-import 'package:albaqer/controllers/marriage_controller.dart';
 import 'package:albaqer/controllers/prayer_notification_builder.dart';
 import 'package:albaqer/controllers/color_mode.dart';
 import 'package:albaqer/controllers/prayer_time_controller.dart';
 import 'package:albaqer/controllers/update_content_controler.dart';
-import 'package:albaqer/controllers/user_controller.dart';
 import 'package:albaqer/controllers/verses_controller.dart';
 import 'package:albaqer/models/dua.dart';
 import 'package:albaqer/models/fcm_notfication.dart';
@@ -19,7 +16,6 @@ import 'package:albaqer/models/hadith.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:albaqer/models/prayer_notification.dart';
 import 'package:albaqer/models/update_content.dart';
-import 'package:albaqer/models/user.dart';
 import 'package:albaqer/models/verse.dart';
 import 'package:albaqer/theme_widget.dart';
 
@@ -38,45 +34,49 @@ int? isviewed;
 void main() async {
   await initHive();
   AwesomeNotifications().initialize(
-      // set the icon to null if you want to use the default app icon
-      'resource://drawable/logo',
-      [
-        setNewPrayerChannel(name: 'صلاة الفجر', key: 'fajer_time'),
-        setNewPrayerChannel(name: 'صلاة الظهر', key: 'duhar_time'),
-        setNewPrayerChannel(name: 'صلاة العصر', key: 'asr_time'),
-        setNewPrayerChannel(name: 'صلاة المغرب', key: 'magrb_time'),
-        setNewPrayerChannel(name: 'صلاة العشاء', key: 'isha_time'),
-        setNewContentChannel(name: 'الآية اليومية', key: kVersesChannleKey),
-        setNewContentChannel(name: 'الدعاء اليومي', key: kDuasChannleKey),
-        setNewContentChannel(
-          name: 'الحديث الشريف',
-          key: kHadithChannleKey,
-        ),
-        NotificationChannel(
-            channelKey: kFcmChannleKey,
-            channelName: 'اشعارات عامة',
-            channelDescription: 'الإشعارات المرسلة من فريق الإدارة',
-            ledColor: Colors.white,
-            defaultColor: Colors.blue,
-            importance: NotificationImportance.High,
-            playSound: true),
-        NotificationChannel(
-            channelKey: reminderChannelKey,
-            channelName: 'تذكير',
-            channelDescription: 'اشعارات التذكير',
-            ledColor: Colors.white,
-            defaultColor: Colors.blue,
-            importance: NotificationImportance.High,
-            playSound: true)
-      ],
-      channelGroups: [
-        NotificationChannelGroup(
-            channelGroupkey: kPrayerChannelGroupKey,
-            channelGroupName: 'مواعيد الصلاة'),
-        NotificationChannelGroup(
-            channelGroupkey: kContentChannelGroupKey,
-            channelGroupName: 'الإشعارات اليومية')
-      ]);
+    // set the icon to null if you want to use the default app icon
+    'resource://drawable/logo',
+    [
+      setNewPrayerChannel(name: 'صلاة الظهر', key: 'duhar_time'),
+      setNewPrayerChannel(name: 'صلاة العصر', key: 'asr_time'),
+      setNewPrayerChannel(name: 'صلاة المغرب', key: 'magrb_time'),
+      setNewPrayerChannel(name: 'صلاة العشاء', key: 'isha_time'),
+      setNewContentChannel(name: 'الآية اليومية', key: kVersesChannleKey),
+      setNewContentChannel(name: 'الدعاء اليومي', key: kDuasChannleKey),
+      setNewContentChannel(
+        name: 'الحديث الشريف',
+        key: kHadithChannleKey,
+      ),
+      NotificationChannel(
+          channelKey: kFcmChannleKey,
+          channelName: 'اشعارات عامة',
+          channelDescription: 'الإشعارات المرسلة من فريق الإدارة',
+          ledColor: Colors.white,
+          defaultColor: Colors.blue,
+          importance: NotificationImportance.High,
+          playSound: true),
+      NotificationChannel(
+          channelKey: reminderChannelKey,
+          channelName: 'تذكير',
+          channelDescription: 'اشعارات التذكير',
+          ledColor: Colors.white,
+          defaultColor: Colors.blue,
+          importance: NotificationImportance.High,
+          playSound: true)
+    ],
+    channelGroups: [
+      NotificationChannelGroup(
+          channelGroupkey: kPrayerChannelGroupKey,
+          channelGroupName: 'مواعيد الصلاة'),
+      NotificationChannelGroup(
+          channelGroupkey: kContentChannelGroupKey,
+          channelGroupName: 'الإشعارات اليومية')
+    ],
+  );
+
+  AwesomeNotifications().setChannel(
+      setNewPrayerChannel(name: 'صلاة الفجر', key: 'fajer_time'),
+      forceUpdate: true);
 
   WidgetsFlutterBinding.ensureInitialized();
   NotificationController();
@@ -96,7 +96,6 @@ Future<void> initHive() async {
   Hive.registerAdapter(DuaAdapter());
   Hive.registerAdapter(FcmNotificationAdapter());
   Hive.registerAdapter(HadithAdapter());
-  Hive.registerAdapter(UserAdapter());
   Hive.registerAdapter(NewVerseAdapter());
   Hive.registerAdapter(ReminderAdapter());
   await Hive.openBox<NewVerse>(kNewVerseBoxName);
@@ -105,7 +104,6 @@ Future<void> initHive() async {
   await Hive.openBox<FcmNotification>(kFcmBoxName);
   await Hive.openBox<Dua>(kDuaBoxName);
   await Hive.openBox<Hadith>(kHadithBoxName);
-  await Hive.openBox<User>(kUserBoxName);
   await Hive.openBox<Reminder>(kReminderBoxName);
 }
 
@@ -126,15 +124,6 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (ctx) => UpdateContentController(),
-        ),
-        ChangeNotifierProvider(
-          create: (ctx) => UserController(),
-        ),
-        ChangeNotifierProvider(
-          create: (ctx) => MarriageController(),
-        ),
-        ChangeNotifierProvider(
-          create: (ctx) => EditUserController(),
         ),
         ChangeNotifierProvider(
           create: (ctx) => AppInfoController(),

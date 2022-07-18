@@ -3,6 +3,7 @@ import 'package:albaqer/controllers/verses_controller.dart';
 import 'package:albaqer/models/verse.dart';
 import 'package:albaqer/views/components/content_card_components/card_widget.dart';
 import 'package:albaqer/views/components/content_card_components/verse_top_widget.dart';
+import 'package:albaqer/views/components/empty.dart';
 import 'package:albaqer/views/components/rounded_button_widget.dart';
 
 import 'package:albaqer/views/components/static_page_name_container.dart';
@@ -64,32 +65,41 @@ class _OnlineVersesPageState extends State<OnlineVersesPage> {
                     height: 16,
                   ),
                   builderDelegate: PagedChildBuilderDelegate<Verse>(
+                      firstPageErrorIndicatorBuilder: ((context) =>
+                          const EmptyWidget(
+                            title: 'تأكد من اتصالك بالإنترنت',
+                          )),
+                      newPageErrorIndicatorBuilder: ((context) =>
+                          const EmptyWidget(
+                            title: 'تأكد من اتصالك بالإنترنت',
+                          )),
                       itemBuilder: (context, verse, index) {
-                    if (index == 0) {
-                      return Column(
-                        children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: RoundedButtonWidget(
-                              label: const Text(
-                                'الآيات السابقة',
-                                style: TextStyle(
-                                    fontSize: 14, fontWeight: FontWeight.w500),
+                        if (index == 0) {
+                          return Column(
+                            children: [
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: RoundedButtonWidget(
+                                  label: const Text(
+                                    'الآيات السابقة',
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  width: 30.w,
+                                  onpressed: () => Navigator.pushNamed(
+                                      context, PreviousVersesPage.routeName),
+                                ),
                               ),
-                              width: 30.w,
-                              onpressed: () => Navigator.pushNamed(
-                                  context, PreviousVersesPage.routeName),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 2.h,
-                          ),
-                          buildCardWidget(verse, context),
-                        ],
-                      );
-                    }
-                    return buildCardWidget(verse, context);
-                  }),
+                              SizedBox(
+                                height: 2.h,
+                              ),
+                              buildCardWidget(verse, context),
+                            ],
+                          );
+                        }
+                        return buildCardWidget(verse, context);
+                      }),
                 ),
               )
             ]

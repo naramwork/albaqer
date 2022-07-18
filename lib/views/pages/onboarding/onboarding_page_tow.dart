@@ -31,7 +31,7 @@ class OnBoardingPageTow extends StatelessWidget {
                 height: 4.h,
               ),
               const Text(
-                'زواجك مبارك',
+                'اجندة مواعيد واعمال',
                 style: TextStyle(
                     color: Colors.white,
                     fontFamily: 'DecoType',

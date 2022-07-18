@@ -67,7 +67,9 @@ class UpdateContentController extends ChangeNotifier {
 
       return true;
     } catch (error) {
-      return false;
+      print(error);
+      getOfTheDayOffline();
+      return true;
     }
   }
 
@@ -94,7 +96,7 @@ class UpdateContentController extends ChangeNotifier {
     // add Verses To VersesBox
     if (versesBox.isOpen) {
       if (versesBox.isNotEmpty) {
-        versesBox.clear();
+        await versesBox.clear();
       }
       final verseslistData = body['verses'] as List<dynamic>;
       for (var versesObject in verseslistData) {
@@ -102,14 +104,13 @@ class UpdateContentController extends ChangeNotifier {
           versesList.add(Verse.fromJson(versesObject));
         }
       }
-
       versesBox.addAll(versesList);
     }
 
     //add DuaContent To Box
     if (duaBox.isOpen) {
       if (duaBox.isNotEmpty) {
-        duaBox.clear();
+        await duaBox.clear();
       }
       final listData = body['dua'] as List<dynamic>;
       for (var duaObject in listData) {
@@ -123,7 +124,7 @@ class UpdateContentController extends ChangeNotifier {
     //add HadithContent To Box
     if (hadithBox.isOpen) {
       if (hadithBox.isNotEmpty) {
-        hadithBox.clear();
+        await hadithBox.clear();
       }
       final listData = body['hadith'] as List<dynamic>;
       for (var hadithObject in listData) {
@@ -133,7 +134,9 @@ class UpdateContentController extends ChangeNotifier {
       }
       hadithBox.addAll(hadithList);
     }
-
+    // print('hadith ${hadithBox.length}');
+    // print('dua ${duaBox.length}');
+    // print('verse ${versesBox.length}');
     setStartValues(
         versesList: versesList, hadithList: hadithList, duaList: duaList);
   }

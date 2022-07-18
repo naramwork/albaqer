@@ -3,12 +3,10 @@ import 'package:albaqer/app/helper_files/snack_bar.dart';
 import 'package:albaqer/app/themes/color_const.dart';
 import 'package:albaqer/controllers/color_mode.dart';
 import 'package:albaqer/full_quran/quran.dart';
-import 'package:albaqer/models/new_verse.dart';
 import 'package:albaqer/models/qurran_result.dart';
 import 'package:albaqer/models/surah.dart';
 import 'package:albaqer/views/components/layout/custom_bottom_app_bar.dart';
 import 'package:albaqer/views/components/layout/fap.dart';
-import 'package:albaqer/views/components/marriage/marriage_app_bar.dart';
 
 import 'package:albaqer/views/pages/quran/quran_search_dialog.dart';
 import 'package:albaqer/views/pages/quran/quran_search_page.dart';
@@ -18,6 +16,8 @@ import 'package:provider/provider.dart';
 
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+
+import '../../components/marriage_app_bar.dart';
 
 class QuranResultPage extends StatefulWidget {
   static String routeName = '/quran_result_page';
@@ -34,7 +34,7 @@ class _QuranResultPageState extends State<QuranResultPage> {
   QuranResult? foundedVerse;
   int initIndex = 0;
   List<Surah> fullQuran = [];
-  String foundedVerseString = '';
+  String foundedVerseString = 'naram';
   List<Surah> searchSurah = [];
   final ItemScrollController itemScrollController = ItemScrollController();
   final ItemPositionsListener itemPositionsListener =
@@ -270,19 +270,19 @@ class _QuranResultPageState extends State<QuranResultPage> {
       initIndex = index;
       foundedVerseString = quranResult.verse.content;
     }
-    if (WidgetsBinding.instance != null) {
-      WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-        String message = '';
-        if (quranResult.isReadMark) {
-          message =
-              "العلامة المرجعية موجودة في الاية رقم ${quranResult.verse.verseNumber} من سورة ${quranResult.verse.surah}";
-        } else {
-          message =
-              "النتيجة موجودة في الاية رقم ${quranResult.verse.verseNumber} من سورة ${quranResult.verse.surah}";
-        }
-        showSnackBar(message, context);
-      });
-    }
+    // if (WidgetsBinding.instance != null) {
+    //   WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+    //     String message = '';
+    //     if (quranResult.isReadMark) {
+    //       message =
+    //           "العلامة المرجعية موجودة في الاية رقم ${quranResult.verse.verseNumber} من سورة ${quranResult.verse.surah}";
+    //     } else {
+    //       message =
+    //           "النتيجة موجودة في الاية رقم ${quranResult.verse.verseNumber} من سورة ${quranResult.verse.surah}";
+    //     }
+    //     showSnackBar(message, context);
+    //   });
+    // }
   }
 
   void onSurahSelect(int number) {
